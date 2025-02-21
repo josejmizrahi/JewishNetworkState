@@ -89,28 +89,135 @@ export class DefaultJewishIDService implements JewishIDService {
   ) {}
 
   async createProfile(
-    _email: string,
-    _phone: string,
-    _mfaEnabled: boolean,
-    _initialDocuments?: Array<{
+    email: string,
+    phone: string,
+    mfaEnabled: boolean,
+    initialDocuments?: Array<{
       data: Uint8Array;
       type: string;
       metadata: Record<string, unknown>;
     }>
   ): Promise<JewishID> {
-    throw new Error('Not implemented');
+    // Generate key pair for personal info encryption
+    const { publicKey, privateKey } = await this.encryptionService.generateKeyPair();
+
+    // Set up MFA if enabled
+    if (mfaEnabled) {
+      const { secret, qrCode } = await this.authService.setupTOTP(email);
+      await this.authService.generateBackupCodes(email);
+    }
+
+    // Encrypt and store personal info
+    const personalInfo = {
+      email,
+      phone,
+      mfaEnabled,
+      createdAt: new Date()
+    };
+    const encryptedData = await this.encryptionService.encrypt(personalInfo, publicKey);
+
+    // Store documents if provided
+    const documents: EncryptedDocument[] = [];
+    if (initialDocuments) {
+      for (const doc of initialDocuments) {
+        const { ipfsHash, encryptedKeys } = await this.ipfsService.storeDocument(
+          doc.data,
+          [publicKey],
+          this.encryptionService
+        );
+        documents.push({
+          id: crypto.randomUUID(),
+          ipfsHash,
+          encryptedKey: encryptedKeys[publicKey],
+          documentType: doc.type,
+          metadata: {
+            ...doc.metadata,
+            createdAt: new Date(),
+            updatedAt: new Date()
+          }
+        });
+      }
+    }
+
+    // Create JewishID profile
+    const profile: JewishID = {
+      id: crypto.randomUUID(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      verificationLevel: VerificationLevel.BASIC,
+      endorsements: [],
+      documents,
+      status: 'pending',
+      personalInfo: {
+        encryptedData,
+        publicKey
+      },
+      verificationMeta: {
+        lastVerified: new Date(),
+        verificationMethod: 'heritage',
+        verifierIds: []
+      }
+    };
+
+    // Store in database
+    await this.databaseService.createProfile(profile);
+
+    return profile;
   }
 
   async upgradeVerification(
-    _id: string,
-    _documents: Array<{
+    id: string,
+    documents: Array<{
       data: Uint8Array;
       type: string;
       metadata: Record<string, unknown>;
     }>,
-    _verificationMethod: JewishID['verificationMeta']['verificationMethod']
+    verificationMethod: JewishID['verificationMeta']['verificationMethod']
   ): Promise<JewishID> {
-    throw new Error('Not implemented');
+    // Get existing profile
+    const profile = await this.databaseService.getProfile(id);
+    if (!profile) {
+      throw new Error('Profile not found');
+    }
+
+    // Store new documents
+    const newDocuments: EncryptedDocument[] = [];
+    for (const doc of documents) {
+      const { ipfsHash, encryptedKeys } = await this.ipfsService.storeDocument(
+        doc.data,
+        [profile.personalInfo.publicKey],
+        this.encryptionService
+      );
+      newDocuments.push({
+        id: crypto.randomUUID(),
+        ipfsHash,
+        encryptedKey: encryptedKeys[profile.personalInfo.publicKey],
+        documentType: doc.type,
+        metadata: {
+          ...doc.metadata,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        }
+      });
+    }
+
+    // Update profile with new documents and verification method
+    const updatedProfile: JewishID = {
+      ...profile,
+      documents: [...profile.documents, ...newDocuments],
+      verificationLevel: VerificationLevel.ADVANCED,
+      updatedAt: new Date(),
+      verificationMeta: {
+        lastVerified: new Date(),
+        verificationMethod,
+        verifierIds: profile.verificationMeta.verifierIds
+      }
+    };
+
+    // Store updated profile
+    await this.databaseService.updateProfile(id, updatedProfile);
+
+    return updatedProfile;
   }
 
   async getProfile(
