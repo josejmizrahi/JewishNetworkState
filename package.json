@@ -2,12 +2,11 @@
   "name": "jewishnetworkstate",
   "version": "1.0.0",
   "description": "Jewish Network State - A decentralized platform for Jewish identity and community",
-
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint . --ext .ts",
-    "lint:fix": "eslint . --ext .ts --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "type": "module",
   "keywords": [],
@@ -21,5 +20,8 @@
     "eslint-config-prettier": "^10.0.1",
     "prettier": "^3.5.1",
     "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "xrpl": "^4.2.0"
   }
 }

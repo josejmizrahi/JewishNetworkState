@@ -21,7 +21,7 @@ export interface MitzvahPoints extends TokenBase {
   type: 'MVP';
   points: number;
   category: 'community' | 'religious' | 'charity';
-  soulbound: true; // Always true as MitzvahPoints are non-transferable
+  soulbound: true;
   achievements: {
     id: string;
     name: string;
@@ -32,13 +32,15 @@ export interface MitzvahPoints extends TokenBase {
 
 export interface TokenTransaction {
   id: string;
-  timestamp: Date;
   fromAddress: string;
   toAddress: string;
-  tokenType: 'SHK' | 'MVP';
-  amount: string; // Decimal string for precise amounts
+  currency: string;
+  amount: string;
+  timestamp: Date;
   status: 'pending' | 'completed' | 'failed';
-  metadata: {
+  type: 'transfer' | 'issuance' | 'burn';
+  tokenType: 'SHK' | 'MVP';
+  metadata?: {
     reason?: string;
     reference?: string;
     xrplTxHash?: string;

@@ -86,8 +86,8 @@ export interface KYCService {
 // Placeholder implementation
 export class DefaultKYCService implements KYCService {
   async submitDocuments(
-    userId: string,
-    documents: Array<{
+    _userId: string,
+    _documents: Array<{
       type: KYCDocument['type'];
       ipfsHash: string;
       metadata: KYCDocument['metadata'];
@@ -96,7 +96,7 @@ export class DefaultKYCService implements KYCService {
     throw new Error('Not implemented');
   }
 
-  async getKYCStatus(userId: string): Promise<{
+  async getKYCStatus(_userId: string): Promise<{
     status: 'none' | 'pending' | 'partial' | 'complete';
     documents: KYCDocument[];
     missingDocuments: KYCDocument['type'][];
@@ -105,14 +105,14 @@ export class DefaultKYCService implements KYCService {
   }
 
   async performAMLCheck(
-    userId: string,
-    type: AMLCheck['type'],
-    data: Record<string, unknown>
+    _userId: string,
+    _type: AMLCheck['type'],
+    _data: Record<string, unknown>
   ): Promise<AMLCheck> {
     throw new Error('Not implemented');
   }
 
-  async getTransactionLimits(userId: string): Promise<{
+  async getTransactionLimits(_userId: string): Promise<{
     daily: number;
     monthly: number;
     yearly: number;

@@ -1,15 +1,16 @@
 import js from '@eslint/js';
 import typescript from '@typescript-eslint/eslint-plugin';
-import typescriptParser from '@typescript-eslint/parser';
+import tsParser from '@typescript-eslint/parser';
 
 export default [
   js.configs.recommended,
   {
     files: ['**/*.ts'],
     languageOptions: {
-      parser: typescriptParser,
+      parser: tsParser,
       parserOptions: {
-        project: './tsconfig.json'
+        ecmaVersion: 2020,
+        sourceType: 'module'
       }
     },
     plugins: {
@@ -18,7 +19,11 @@ export default [
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }]
+      '@typescript-eslint/no-unused-vars': ['error', { 
+        'argsIgnorePattern': '^_',
+        'varsIgnorePattern': '^_'
+      }],
+      'no-unused-vars': 'off' // Turn off base rule to avoid conflicts
     }
   }
 ];
