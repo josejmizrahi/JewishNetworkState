@@ -11,7 +11,8 @@
     },
 
     /* Bundler mode */
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "allowJs": true,
@@ -20,7 +21,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["vite/client", "node", "react", "react-dom"],
 
     /* Linting */
     "strict": true,
