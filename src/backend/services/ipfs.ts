@@ -30,9 +30,9 @@ export interface IPFSService {
 // Placeholder implementation
 export class DefaultIPFSService implements IPFSService {
   async storeDocument(
-    document: Uint8Array,
-    recipientPublicKeys: string[],
-    encryptionService: EncryptionService
+    _document: Uint8Array,
+    _recipientPublicKeys: string[],
+    _encryptionService: EncryptionService
   ): Promise<{
     ipfsHash: string;
     encryptedKeys: Record<string, string>;
@@ -41,9 +41,9 @@ export class DefaultIPFSService implements IPFSService {
   }
 
   async retrieveDocument(
-    ipfsHash: string,
-    privateKey: string,
-    encryptionService: EncryptionService
+    _ipfsHash: string,
+    _privateKey: string,
+    _encryptionService: EncryptionService
   ): Promise<Uint8Array> {
     throw new Error('Not implemented');
   }

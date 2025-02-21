@@ -70,29 +70,29 @@ export interface AuthService {
 
 // Placeholder implementation
 export class DefaultAuthService implements AuthService {
-  async setupTOTP(userId: string): Promise<{
+  async setupTOTP(_userId: string): Promise<{
     secret: string;
     qrCode: string;
   }> {
     throw new Error('Not implemented');
   }
 
-  async verifyTOTP(userId: string, code: string): Promise<boolean> {
+  async verifyTOTP(_userId: string, _code: string): Promise<boolean> {
     throw new Error('Not implemented');
   }
 
-  async generateBackupCodes(userId: string, count = 10): Promise<string[]> {
+  async generateBackupCodes(_userId: string, _count = 10): Promise<string[]> {
     throw new Error('Not implemented');
   }
 
-  async verifyBackupCode(userId: string, code: string): Promise<boolean> {
+  async verifyBackupCode(_userId: string, _code: string): Promise<boolean> {
     throw new Error('Not implemented');
   }
 
   async checkRateLimit(
-    key: string,
-    action: string,
-    config: RateLimitConfig
+    _key: string,
+    _action: string,
+    _config: RateLimitConfig
   ): Promise<{
     allowed: boolean;
     remaining: number;

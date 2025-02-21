@@ -62,9 +62,9 @@ export interface KeyStoreService {
 // Placeholder implementation
 export class DefaultKeyStoreService implements KeyStoreService {
   async generateKeyPair(
-    userId: string,
-    purpose: KeyMetadata['purpose'],
-    algorithm: string
+    _userId: string,
+    _purpose: KeyMetadata['purpose'],
+    _algorithm: string
   ): Promise<{
     keyId: string;
     publicKey: string;
@@ -73,8 +73,8 @@ export class DefaultKeyStoreService implements KeyStoreService {
   }
 
   async getKey(
-    keyId: string,
-    purpose: KeyMetadata['purpose']
+    _keyId: string,
+    _purpose: KeyMetadata['purpose']
   ): Promise<{
     publicKey: string;
     privateKey?: string;
@@ -83,11 +83,11 @@ export class DefaultKeyStoreService implements KeyStoreService {
     throw new Error('Not implemented');
   }
 
-  async revokeKey(keyId: string, reason: string): Promise<void> {
+  async revokeKey(_keyId: string, _reason: string): Promise<void> {
     throw new Error('Not implemented');
   }
 
-  async listKeys(userId: string): Promise<Array<{
+  async listKeys(_userId: string): Promise<Array<{
     keyId: string;
     metadata: KeyMetadata;
   }>> {

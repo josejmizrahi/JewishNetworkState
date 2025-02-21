@@ -51,10 +51,10 @@ export interface JWTService {
 // Placeholder implementation
 export class DefaultJWTService implements JWTService {
   async generateToken(
-    userId: string,
-    roles: string[],
-    mfaVerified: boolean,
-    kycLevel: JWTPayload['kycLevel']
+    _userId: string,
+    _roles: string[],
+    _mfaVerified: boolean,
+    _kycLevel: JWTPayload['kycLevel']
   ): Promise<{
     token: string;
     expiresAt: Date;
@@ -62,15 +62,15 @@ export class DefaultJWTService implements JWTService {
     throw new Error('Not implemented');
   }
 
-  async verifyToken(token: string): Promise<JWTPayload> {
+  async verifyToken(_token: string): Promise<JWTPayload> {
     throw new Error('Not implemented');
   }
 
-  async revokeToken(token: string): Promise<void> {
+  async revokeToken(_token: string): Promise<void> {
     throw new Error('Not implemented');
   }
 
-  async isTokenBlacklisted(token: string): Promise<boolean> {
+  async isTokenBlacklisted(_token: string): Promise<boolean> {
     throw new Error('Not implemented');
   }
 }

@@ -14,11 +14,11 @@ export interface EncryptionService {
 
 // Placeholder for actual implementation
 export class DefaultEncryptionService implements EncryptionService {
-  async encrypt(data: unknown, publicKey: string): Promise<string> {
+  async encrypt(_data: unknown, _publicKey: string): Promise<string> {
     throw new Error('Not implemented');
   }
 
-  async decrypt(encryptedData: string, privateKey: string): Promise<unknown> {
+  async decrypt(_encryptedData: string, _privateKey: string): Promise<unknown> {
     throw new Error('Not implemented');
   }
 
@@ -27,8 +27,8 @@ export class DefaultEncryptionService implements EncryptionService {
   }
 
   async encryptDocument(
-    document: Uint8Array,
-    recipientPublicKeys: string[]
+    _document: Uint8Array,
+    _recipientPublicKeys: string[]
   ): Promise<{
     encryptedData: Uint8Array;
     encryptedKeys: Record<string, string>;
