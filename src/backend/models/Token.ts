@@ -2,43 +2,7 @@
  * Token models for ShekelCoin (SHK) and MitzvahPoints (MVP)
  */
 
-export interface ShekelCoin {
-  id: string;
-  address: string;
-  amount: string;
-  timestamp: Date;
-  status: 'issued' | 'burned';
-  metadata?: Record<string, unknown>;
-}
-
-export interface MitzvahPoints {
-  id: string;
-  points: number;
-  category: 'community' | 'learning' | 'charity' | 'ritual';
-  achievement: {
-    name: string;
-    description: string;
-  };
-  timestamp: Date;
-  status: 'awarded' | 'revoked';
-}
-
-export interface TokenTransaction {
-  id: string;
-  fromAddress: string;
-  toAddress: string;
-  currency: string;
-  amount: string;
-  timestamp: Date;
-  status: 'pending' | 'completed' | 'failed';
-  type: 'transfer' | 'issuance' | 'burn';
-  tokenType: 'SHK' | 'MVP';
-  metadata?: {
-    reason?: string;
-    reference?: string;
-    xrplTxHash?: string;
-  };
-}
+export interface TokenBase {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -57,7 +21,7 @@ export interface MitzvahPoints extends TokenBase {
   type: 'MVP';
   points: number;
   category: 'community' | 'religious' | 'charity';
-  soulbound: true; // Always true as MitzvahPoints are non-transferable
+  soulbound: true;
   achievements: {
     id: string;
     name: string;
@@ -81,4 +45,5 @@ export interface TokenTransaction {
     reference?: string;
     xrplTxHash?: string;
   };
+}
 }

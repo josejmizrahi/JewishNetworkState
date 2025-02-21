@@ -78,11 +78,14 @@ export class DefaultTokenService implements TokenService {
     // Record issuance
     const shekelCoin: ShekelCoin = {
       id: randomUUID(),
-      address: toAddress,
-      amount: amount.toString(10),
-      timestamp: new Date(),
-      status: 'issued',
-      metadata
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      owner: toAddress,
+      type: 'SHK',
+      amount,
+      frozen: false,
+      trustLineIssuer: await this.xrplService.initializeIssuer().then(res => res.issuerAddress),
+      metadata: metadata || {}
     };
 
     await this.databaseService.recordTokenIssuance(shekelCoin);
@@ -116,12 +119,19 @@ export class DefaultTokenService implements TokenService {
     // Record achievement
     const mitzvahPoints: MitzvahPoints = {
       id: randomUUID(),
-      address: toAddress,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      owner: toAddress,
+      type: 'MVP',
       points,
       category,
-      achievement,
-      timestamp: new Date(),
-      status: 'awarded'
+      soulbound: true,
+      achievements: [{
+        id: randomUUID(),
+        ...achievement,
+        earnedAt: new Date()
+      }],
+      metadata: {}
     };
 
     await this.databaseService.recordAchievement(mitzvahPoints);

@@ -3,6 +3,7 @@
  */
 
 import { Client, Wallet } from 'xrpl';
+import { TrustSet, Payment } from 'xrpl/dist/npm/models/transactions';
 import { DatabaseService } from './database';
 import { KeyStoreService } from './keystore';
 
@@ -14,6 +15,7 @@ export interface XRPLConfig {
 }
 
 export interface XRPLService {
+  issuerWallet: Wallet;
   /**
    * Initialize XRPL client and issuer wallet
    */
@@ -34,18 +36,18 @@ export interface XRPLService {
    */
   setupTrustLine(
     userAddress: string,
-    currency: string,
+    currency: 'SHK' | 'MVP',
     limit: string
-  ): Promise<TrustSet>;
+  ): Promise<string>;
 
   /**
    * Issue tokens to a user
    */
   issueTokens(
     toAddress: string,
-    currency: string,
+    currency: 'SHK' | 'MVP',
     amount: string
-  ): Promise<Payment>;
+  ): Promise<string>;
 
   /**
    * Transfer tokens between users
@@ -53,9 +55,9 @@ export interface XRPLService {
   transferTokens(
     fromAddress: string,
     toAddress: string,
-    currency: string,
+    currency: 'SHK' | 'MVP',
     amount: string
-  ): Promise<Payment>;
+  ): Promise<string>;
   /**
    * Initialize issuer account and currencies
    */
