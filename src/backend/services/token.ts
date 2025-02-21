@@ -72,15 +72,14 @@ export class DefaultTokenService implements TokenService {
     const payment = await this.xrplService.issueTokens(
       toAddress,
       'SHK',
-      amount.toString(),
-      metadata ? JSON.stringify(metadata) : undefined
+      amount.toString(10)
     );
 
     // Record issuance
     const shekelCoin: ShekelCoin = {
       id: randomUUID(),
       address: toAddress,
-      amount: amount.toString(),
+      amount: amount.toString(10),
       timestamp: new Date(),
       status: 'issued',
       metadata
@@ -111,12 +110,7 @@ export class DefaultTokenService implements TokenService {
     const payment = await this.xrplService.issueTokens(
       toAddress,
       'MVP',
-      points.toString(),
-      JSON.stringify({
-        category,
-        achievement,
-        soulbound: true
-      })
+      points.toString()
     );
 
     // Record achievement
@@ -141,20 +135,33 @@ export class DefaultTokenService implements TokenService {
     amount: bigint
   ): Promise<TokenTransaction> {
     // Verify sufficient balance
-    const balance = await this.xrplService.getBalance(fromAddress, 'SHK');
-    if (BigInt(balance.balance) < amount) {
+    const balances = await this.xrplService.getBalances(fromAddress);
+    const balance = balances.find(b => b.currency === 'SHK');
+    if (!balance || BigInt(balance.value) < amount) {
       throw new Error('Insufficient balance');
     }
 
     // Transfer tokens
-    const transaction = await this.xrplService.transferTokens(
+    await this.xrplService.transferTokens(
       fromAddress,
       toAddress,
       'SHK',
-      amount.toString()
+      amount.toString(10)
     );
 
     // Record transfer
+    const transaction: TokenTransaction = {
+      id: randomUUID(),
+      fromAddress,
+      toAddress,
+      currency: 'SHK',
+      amount: amount.toString(10),
+      timestamp: new Date(),
+      status: 'pending',
+      type: 'transfer',
+      tokenType: 'SHK'
+    };
+
     await this.databaseService.recordTokenTransfer(transaction);
 
     return transaction;
@@ -167,15 +174,12 @@ export class DefaultTokenService implements TokenService {
     available: string;
     frozen?: string;
   }> {
-    const balance = await this.xrplService.getBalance(
-      address,
-      tokenType
-    );
+    const balances = await this.xrplService.getBalances(address);
+    const balance = balances.find(b => b.currency === tokenType);
 
     return {
-      available: balance.frozen ? '0' : balance.balance,
-      frozen: balance.frozen ? balance.balance : undefined
+      available: balance?.frozen ? '0' : balance?.value || '0',
+      frozen: balance?.frozen ? balance.value : undefined
     };
-  }
   }
 }

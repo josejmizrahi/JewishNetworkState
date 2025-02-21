@@ -15,6 +15,48 @@ export interface XRPLConfig {
 
 export interface XRPLService {
   /**
+   * Initialize XRPL client and issuer wallet
+   */
+  initialize(config: XRPLConfig): Promise<void>;
+
+  /**
+   * Get token balances for an address
+   */
+  getBalances(address: string): Promise<{
+    currency: string;
+    value: string;
+    issuer: string;
+    frozen?: boolean;
+  }[]>;
+
+  /**
+   * Set up trust line for a user
+   */
+  setupTrustLine(
+    userAddress: string,
+    currency: string,
+    limit: string
+  ): Promise<TrustSet>;
+
+  /**
+   * Issue tokens to a user
+   */
+  issueTokens(
+    toAddress: string,
+    currency: string,
+    amount: string
+  ): Promise<Payment>;
+
+  /**
+   * Transfer tokens between users
+   */
+  transferTokens(
+    fromAddress: string,
+    toAddress: string,
+    currency: string,
+    amount: string
+  ): Promise<Payment>;
+  /**
    * Initialize issuer account and currencies
    */
   initializeIssuer(): Promise<{
