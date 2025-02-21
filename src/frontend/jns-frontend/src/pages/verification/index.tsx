@@ -1,8 +1,7 @@
-import * as React from "react"
 import { useState } from "react"
 import { StepCard } from "../../components/verification/step-card"
 import { DocumentUpload } from "../../components/verification/document-upload"
-import { VERIFICATION_STEPS, DocumentType } from "../../types/verification"
+import { VERIFICATION_STEPS } from "../../types/verification"
 
 export default function Verification() {
   const [currentStep, setCurrentStep] = useState(0)
