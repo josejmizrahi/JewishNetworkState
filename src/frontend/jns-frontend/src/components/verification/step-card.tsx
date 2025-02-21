@@ -12,13 +12,13 @@ interface StepCardProps {
 const StatusIcon = ({ status }: { status: VerificationStep['status'] }) => {
   switch (status) {
     case 'completed':
-      return <CheckCircle className="h-5 w-5 text-green-600" />;
+      return <CheckCircle className="h-5 w-5 text-primary" />;
     case 'error':
-      return <AlertCircle className="h-5 w-5 text-red-600" />;
+      return <AlertCircle className="h-5 w-5 text-destructive" />;
     case 'in-progress':
-      return <Loader2 className="h-5 w-5 text-blue-600 animate-spin" />;
+      return <Loader2 className="h-5 w-5 text-primary animate-spin" />;
     default:
-      return <Circle className="h-5 w-5 text-gray-400" />;
+      return <Circle className="h-5 w-5 text-muted-foreground" />;
   }
 };
 
