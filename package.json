@@ -2,6 +2,7 @@
   "name": "jewishnetworkstate",
   "version": "1.0.0",
   "description": "Jewish Network State - A decentralized platform for Jewish identity and community",
+
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -12,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^22.13.4",
     "@typescript-eslint/eslint-plugin": "^8.24.1",
     "@typescript-eslint/parser": "^8.24.1",
     "eslint": "^9.20.1",
