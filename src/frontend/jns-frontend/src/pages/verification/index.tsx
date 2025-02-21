@@ -3,7 +3,7 @@ import { StepCard } from "../../components/verification/step-card"
 import { DocumentUpload } from "../../components/verification/document-upload"
 import { Pagination } from "../../components/ui/pagination"
 import { ScrollArea } from "../../components/ui/scroll-area"
-import { VERIFICATION_STEPS } from "../../types/verification"
+import { VERIFICATION_STEPS, VerificationStep } from "../../types/verification"
 
 const STEPS_PER_PAGE = 3
 
@@ -40,7 +40,7 @@ export default function Verification() {
 
       <ScrollArea className="h-[calc(100vh-16rem)] rounded-lg border scrollbar-hide">
         <div className="grid gap-6 p-6">
-          {currentSteps.map((step, index) => (
+          {currentSteps.map((step: VerificationStep, index: number) => (
             <div key={step.id} className="space-y-6 transition-all duration-300 ease-in-out">
               <StepCard
                 step={step}
