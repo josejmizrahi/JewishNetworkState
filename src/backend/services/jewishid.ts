@@ -3,7 +3,7 @@
  */
 
 import { JewishID, VerificationLevel, Endorsement, EncryptedDocument } from '../models/JewishID';
-import * as crypto from 'node:crypto';
+import { randomUUID } from 'node:crypto';
 import { AuthService } from './auth';
 import { DatabaseService } from './database';
 import { EncryptionService } from './encryption';
@@ -105,7 +105,7 @@ export class DefaultJewishIDService implements JewishIDService {
 
     // Set up MFA if enabled
     if (mfaEnabled) {
-      const { _secret, _qrCode } = await this.authService.setupTOTP(email);
+      await this.authService.setupTOTP(email);
       await this.authService.generateBackupCodes(email);
     }
 
@@ -128,7 +128,7 @@ export class DefaultJewishIDService implements JewishIDService {
           this.encryptionService
         );
         documents.push({
-          id: crypto.randomUUID(),
+          id: randomUUID(),
           ipfsHash,
           encryptedKey: encryptedKeys[publicKey],
           documentType: doc.type,
@@ -143,7 +143,7 @@ export class DefaultJewishIDService implements JewishIDService {
 
     // Create JewishID profile
     const profile: JewishID = {
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       createdAt: new Date(),
       updatedAt: new Date(),
       verificationLevel: VerificationLevel.BASIC,
@@ -191,7 +191,7 @@ export class DefaultJewishIDService implements JewishIDService {
         this.encryptionService
       );
       newDocuments.push({
-        id: crypto.randomUUID(),
+        id: randomUUID(),
         ipfsHash,
         encryptedKey: encryptedKeys[profile.personalInfo.publicKey],
         documentType: doc.type,
@@ -267,7 +267,7 @@ export class DefaultJewishIDService implements JewishIDService {
     // Update MFA settings
     if (enable && !decrypted.mfaEnabled) {
       const { email } = decrypted;
-      const { _secret, _qrCode } = await this.authService.setupTOTP(email as string);
+      await this.authService.setupTOTP(email as string);
       await this.authService.generateBackupCodes(email as string);
     }
 
