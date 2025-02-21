@@ -105,7 +105,7 @@ export class DefaultJewishIDService implements JewishIDService {
 
     // Set up MFA if enabled
     if (mfaEnabled) {
-      const { secret: _secret, qrCode: _qrCode } = await this.authService.setupTOTP(email);
+      const { _secret, _qrCode } = await this.authService.setupTOTP(email);
       await this.authService.generateBackupCodes(email);
     }
 
@@ -267,7 +267,7 @@ export class DefaultJewishIDService implements JewishIDService {
     // Update MFA settings
     if (enable && !decrypted.mfaEnabled) {
       const { email } = decrypted;
-      const { secret: _secret, qrCode: _qrCode } = await this.authService.setupTOTP(email as string);
+      const { _secret, _qrCode } = await this.authService.setupTOTP(email as string);
       await this.authService.generateBackupCodes(email as string);
     }
 
