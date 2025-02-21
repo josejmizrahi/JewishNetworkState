@@ -38,7 +38,7 @@ export default function Verification() {
         </div>
       </div>
 
-      <ScrollArea className="h-[calc(100vh-16rem)] rounded-lg border">
+      <ScrollArea className="h-[calc(100vh-16rem)] rounded-lg border scrollbar-hide">
         <div className="grid gap-6 p-6">
           {currentSteps.map((step, index) => (
             <div key={step.id} className="space-y-6 transition-all duration-300 ease-in-out">
@@ -48,7 +48,7 @@ export default function Verification() {
                 onActivate={() => setCurrentStep(index + (currentPage - 1) * STEPS_PER_PAGE)}
               />
               {currentStep === index + (currentPage - 1) * STEPS_PER_PAGE && step.id === 'document-upload' && (
-                <div className="grid gap-6 p-6 border rounded-lg bg-muted/50">
+                <div className="grid gap-6 p-6 border rounded-lg bg-muted/50 animate-in fade-in-50 duration-500">
                   <DocumentUpload
                     type="identity"
                     onUpload={handleUpload}
