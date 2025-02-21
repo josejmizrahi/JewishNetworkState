@@ -1,12 +1,13 @@
+import * as React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-
 import { ThemeProvider } from './components/theme-provider'
 import { Layout } from './components/layout'
 import { Button } from './components/ui'
 import { UserCheck, Shield, Users, ChevronRight } from 'lucide-react'
 import Verification from './pages/verification'
+import ProfilePage from './pages/profile'
 
-function App() {
+function App(): React.ReactElement {
   return (
     <Router>
       <ThemeProvider defaultTheme="system" storageKey="jns-theme">
@@ -14,6 +15,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/verification" element={<Verification />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </Layout>
       </ThemeProvider>
@@ -21,7 +23,7 @@ function App() {
   )
 }
 
-function Home() {
+function Home(): React.ReactElement {
   return (
     <div className="space-y-16">
       <section className="min-h-[80vh] flex flex-col justify-center py-12 text-center space-y-4">
