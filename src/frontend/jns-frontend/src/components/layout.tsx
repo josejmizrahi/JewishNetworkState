@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 import { Link } from "react-router-dom"
-import { ThemeToggle } from "./theme-toggle"
-import { Button } from "./ui/index"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Button } from "@/components/ui"
 import { UserCheck, FileCheck, LogOut } from "lucide-react"
 
 interface LayoutProps {
