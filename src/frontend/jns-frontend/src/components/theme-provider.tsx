@@ -7,6 +7,10 @@ interface ThemeProviderProps {
   storageKey?: string;
 }
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+export function ThemeProvider({ children, defaultTheme = "system", storageKey = "jns-theme" }: ThemeProviderProps) {
+  return (
+    <NextThemesProvider defaultTheme={defaultTheme} storageKey={storageKey}>
+      {children}
+    </NextThemesProvider>
+  )
 }
