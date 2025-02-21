@@ -1,11 +1,11 @@
-import * as React from "react"
+import { ReactNode } from "react"
 import { Link } from "react-router-dom"
 import { ThemeToggle } from "./theme-toggle"
-import { Button } from "./ui"
+import { Button } from "./ui/index"
 import { UserCheck, FileCheck, LogOut } from "lucide-react"
 
 interface LayoutProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export function Layout({ children }: LayoutProps) {

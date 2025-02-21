@@ -1,9 +1,9 @@
-import * as React from "react"
-import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from "../components/ui"
+import { useState } from "react"
+import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from "../components/ui/index"
 import { FileCheck, Upload } from "lucide-react"
 
 export default function Verification() {
-  const [currentStep, setCurrentStep] = React.useState(1)
+  const [currentStep, setCurrentStep] = useState(1)
   const totalSteps = 3
 
   return (
