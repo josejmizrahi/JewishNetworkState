@@ -7,11 +7,11 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
 
     /* Bundler mode */
-    "moduleResolution": "Bundler",
+    "moduleResolution": "node",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "allowJs": true,
@@ -22,7 +22,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["vite/client", "node"],
+    "types": ["vite/client", "node", "react", "react-dom"],
 
     /* Linting */
     "strict": true,
