@@ -1,5 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
-import { Button } from "../ui/button"
+import * as React from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "../ui"
+import { Button } from "../ui"
 import { CheckCircle, Circle, AlertCircle, Loader2 } from "lucide-react"
 import { VerificationStep } from "../../types/verification"
 
