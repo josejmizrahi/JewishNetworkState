@@ -9,6 +9,8 @@ import { DatabaseService } from './database';
 import { EncryptionService } from './encryption';
 import { IPFSService } from './ipfs';
 import { VerificationService } from './verification';
+import * as crypto from 'node:crypto';
+import * as crypto from 'node:crypto';
 
 export interface JewishIDService {
   /**
@@ -100,11 +102,11 @@ export class DefaultJewishIDService implements JewishIDService {
     }>
   ): Promise<JewishID> {
     // Generate key pair for personal info encryption
-    const { publicKey, _privateKey } = await this.encryptionService.generateKeyPair();
+    const { publicKey } = await this.encryptionService.generateKeyPair();
 
     // Set up MFA if enabled
     if (mfaEnabled) {
-      const { _secret, _qrCode } = await this.authService.setupTOTP(email);
+      await this.authService.setupTOTP(email);
       await this.authService.generateBackupCodes(email);
     }
 
@@ -266,7 +268,7 @@ export class DefaultJewishIDService implements JewishIDService {
     // Update MFA settings
     if (enable && !decrypted.mfaEnabled) {
       const { email } = decrypted;
-      const { _secret, _qrCode } = await this.authService.setupTOTP(email as string);
+      await this.authService.setupTOTP(email as string);
       await this.authService.generateBackupCodes(email as string);
     }
 
@@ -335,7 +337,7 @@ export class DefaultJewishIDService implements JewishIDService {
       throw new Error('Profile not found');
     }
 
-    const _trustLevel = await this.verificationService.calculateTrustLevel(profile.endorsements);
+    await this.verificationService.calculateTrustLevel(profile.endorsements);
     const currentLevel = profile.verificationLevel;
 
     // Define requirements for each level
