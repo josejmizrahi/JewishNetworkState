@@ -68,8 +68,8 @@ export class DefaultTokenService implements TokenService {
       amount.toString()
     );
 
-    // Issue tokens
-    const _payment = await this.xrplService.issueTokens(
+    // Issue tokens on XRPL
+    await this.xrplService.issueTokens(
       toAddress,
       'SHK',
       amount.toString(10)
@@ -109,8 +109,8 @@ export class DefaultTokenService implements TokenService {
       points.toString()
     );
 
-    // Issue soulbound tokens
-    const _payment = await this.xrplService.issueTokens(
+    // Issue soulbound tokens on XRPL
+    await this.xrplService.issueTokens(
       toAddress,
       'MVP',
       points.toString()

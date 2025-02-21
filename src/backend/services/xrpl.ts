@@ -4,7 +4,9 @@
 
 import { Client, Wallet } from 'xrpl';
 // These types are used in JSDoc comments
-import type { TrustSet as _TrustSet, Payment as _Payment } from 'xrpl/dist/npm/models/transactions';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { TrustSet, Payment } from 'xrpl/dist/npm/models/transactions';
+/* eslint-enable @typescript-eslint/no-unused-vars */
 import { DatabaseService } from './database';
 import { KeyStoreService } from './keystore';
 
