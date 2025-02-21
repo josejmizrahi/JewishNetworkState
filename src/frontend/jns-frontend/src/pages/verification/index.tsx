@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react"
+import * as React from "react"
+const { useState, useEffect } = React
 import { StepCard } from "../../components/verification/step-card"
 import { DocumentUpload } from "../../components/verification/document-upload"
 import { Pagination } from "../../components/ui/pagination"
@@ -17,8 +18,9 @@ export default function Verification() {
     currentPage * STEPS_PER_PAGE
   );
 
-  const handleUpload = async (_file: File) => {
+  const handleUpload = async (file: File) => {
     // TODO: Implement actual file upload logic
+    console.log('Uploading file:', file.name);
     await new Promise(resolve => setTimeout(resolve, 2000));
   };
 
