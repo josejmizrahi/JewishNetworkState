@@ -2,7 +2,7 @@
  * Token service for managing ShekelCoin and MitzvahPoints
  */
 
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { TokenTransaction, ShekelCoin, MitzvahPoints } from '../models/Token';
 import { XRPLService } from './xrpl';
 import { DatabaseService } from './database';
@@ -84,7 +84,7 @@ export class DefaultTokenService implements TokenService {
       type: 'SHK',
       amount,
       frozen: false,
-      trustLineIssuer: await this.xrplService.initializeIssuer().then(res => res.issuerAddress),
+      trustLineIssuer: (await this.xrplService.initializeIssuer()).issuerAddress,
       metadata: metadata || {}
     };
 
