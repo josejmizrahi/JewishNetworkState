@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Button, Card, CardContent, CardHeader, CardTitle, Input, Label } from "../components/ui/index"
-import { FileCheck, Upload } from "lucide-react"
+import { Upload } from "lucide-react"
 
 export default function Verification() {
   const [currentStep, setCurrentStep] = useState(1)

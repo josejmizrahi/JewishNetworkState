@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { ReactNode } from 'react'
+
 import { ThemeProvider } from './components/theme-provider'
 import { Layout } from './components/layout'
 import { Button } from './components/ui'
