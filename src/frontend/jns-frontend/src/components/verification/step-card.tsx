@@ -1,7 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../ui"
-import { Button } from "../ui"
+import { Card, CardContent, CardHeader, CardTitle, Button } from "@/components/ui"
 import { CheckCircle, Circle, AlertCircle, Loader2 } from "lucide-react"
-import { VerificationStep } from "../../types/verification"
+import { VerificationStep } from "@/types/verification"
 
 interface StepCardProps {
   step: VerificationStep;

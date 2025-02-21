@@ -1,8 +1,7 @@
 import * as React from "react"
-import { Button } from "../ui"
-import { Label } from "../ui"
+import { Button, Label } from "@/components/ui"
 import { Upload, X, File } from "lucide-react"
-import { DocumentType } from "../../types/verification"
+import { DocumentType } from "@/types/verification"
 
 interface DocumentUploadProps {
   type: DocumentType;
