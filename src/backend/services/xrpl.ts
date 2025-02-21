@@ -69,80 +69,6 @@ export interface XRPLService {
     frozen?: boolean;
   }>>;
 
-  /**
-   * Set up trust line for a user
-   */
-  setupTrustLine(
-    userAddress: string,
-    currency: 'SHK' | 'MVP',
-    limit: string
-  ): Promise<string>;
-
-  /**
-   * Issue tokens to a user
-   */
-  issueTokens(
-    toAddress: string,
-    currency: 'SHK' | 'MVP',
-    amount: string
-  ): Promise<string>;
-
-  /**
-   * Transfer tokens between users
-   */
-  transferTokens(
-    fromAddress: string,
-    toAddress: string,
-    currency: 'SHK' | 'MVP',
-    amount: string
-  ): Promise<string>;
-  /**
-   * Initialize issuer account and currencies
-   */
-  initializeIssuer(): Promise<{
-    issuerAddress: string;
-    shekelCoinCurrency: string;
-    mitzvahPointsCurrency: string;
-  }>;
-
-  /**
-   * Set up trust line for user
-   */
-  setupTrustLine(
-    userAddress: string,
-    currency: 'SHK' | 'MVP',
-    limit: string
-  ): Promise<string>;
-
-  /**
-   * Issue tokens to user
-   */
-  issueTokens(
-    toAddress: string,
-    currency: 'SHK' | 'MVP',
-    amount: string
-  ): Promise<string>;
-
-  /**
-   * Transfer tokens between users
-   */
-  transferTokens(
-    fromAddress: string,
-    toAddress: string,
-    currency: 'SHK' | 'MVP',
-    amount: string
-  ): Promise<string>;
-
-  /**
-   * Get account balances
-   */
-  getBalances(
-    address: string
-  ): Promise<Array<{
-    currency: string;
-    value: string;
-    issuer: string;
-  }>>;
 }
 
 export class DefaultXRPLService implements XRPLService {
@@ -156,6 +82,11 @@ export class DefaultXRPLService implements XRPLService {
   ) {
     this.client = new Client(this.getNetworkURL(config.network));
     this.issuerWallet = Wallet.fromSeed(config.issuerSeed);
+  }
+
+  async initialize(config: XRPLConfig): Promise<void> {
+    // Update client with new config
+    this.client = new Client(this.getNetworkURL(config.network));
   }
 
   private getNetworkURL(network: XRPLConfig['network']): string {
@@ -289,6 +220,7 @@ export class DefaultXRPLService implements XRPLService {
     currency: string;
     value: string;
     issuer: string;
+    frozen?: boolean;
   }>> {
     await this.client.connect();
 
@@ -302,7 +234,8 @@ export class DefaultXRPLService implements XRPLService {
       return response.result.lines.map(line => ({
         currency: line.currency,
         value: line.balance,
-        issuer: line.account
+        issuer: line.account,
+        frozen: line.freeze || false
       }));
     } finally {
       await this.client.disconnect();
