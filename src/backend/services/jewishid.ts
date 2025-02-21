@@ -3,7 +3,7 @@
  */
 
 import { JewishID, VerificationLevel, Endorsement, EncryptedDocument } from '../models/JewishID';
-import { randomUUID } from 'node:crypto';
+import crypto from 'node:crypto';
 import { AuthService } from './auth';
 import { DatabaseService } from './database';
 import { EncryptionService } from './encryption';
@@ -142,7 +142,7 @@ export class DefaultJewishIDService implements JewishIDService {
 
     // Create JewishID profile
     const profile: JewishID = {
-      id: randomUUID(),
+      id: crypto.randomUUID(),
       createdAt: new Date(),
       updatedAt: new Date(),
       verificationLevel: VerificationLevel.BASIC,
@@ -190,7 +190,7 @@ export class DefaultJewishIDService implements JewishIDService {
         this.encryptionService
       );
       newDocuments.push({
-        id: randomUUID(),
+        id: crypto.randomUUID(),
         ipfsHash,
         encryptedKey: encryptedKeys[profile.personalInfo.publicKey],
         documentType: doc.type,
