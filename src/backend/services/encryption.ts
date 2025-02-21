@@ -89,6 +89,4 @@ export class DefaultEncryptionService implements EncryptionService {
   ): Promise<unknown> {
     throw new Error('Not implemented');
   }
-    throw new Error('Not implemented');
-  }
 }
