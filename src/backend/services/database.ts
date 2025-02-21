@@ -48,52 +48,52 @@ export interface DatabaseService {
 
 // Placeholder implementation
 export class DefaultDatabaseService implements DatabaseService {
-  async recordTokenIssuance(token: ShekelCoin): Promise<void> {
+  async recordTokenIssuance(_token: ShekelCoin): Promise<void> {
     throw new Error('Not implemented');
   }
 
-  async recordAchievement(achievement: MitzvahPoints): Promise<void> {
+  async recordAchievement(_achievement: MitzvahPoints): Promise<void> {
     throw new Error('Not implemented');
   }
 
-  async recordTokenTransfer(transaction: TokenTransaction): Promise<void> {
+  async recordTokenTransfer(_transaction: TokenTransaction): Promise<void> {
     throw new Error('Not implemented');
   }
 
-  async createProfile(profile: JewishID): Promise<JewishID> {
+  async createProfile(_profile: JewishID): Promise<JewishID> {
     throw new Error('Not implemented');
   }
 
-  async updateProfile(id: string, updates: Partial<JewishID>): Promise<JewishID> {
+  async updateProfile(_id: string, _updates: Partial<JewishID>): Promise<JewishID> {
     throw new Error('Not implemented');
   }
 
-  async getProfile(id: string): Promise<JewishID | null> {
+  async getProfile(_id: string): Promise<JewishID | null> {
     throw new Error('Not implemented');
   }
 
-  async recordTransaction(tx: TokenTransaction): Promise<void> {
+  async recordTransaction(_tx: TokenTransaction): Promise<void> {
     throw new Error('Not implemented');
   }
 
   async getTransactionHistory(
-    address: string,
-    tokenType?: 'SHK' | 'MVP'
+    _address: string,
+    _tokenType?: 'SHK' | 'MVP'
   ): Promise<TokenTransaction[]> {
     throw new Error('Not implemented');
   }
 
   async storeDocument(
-    userId: string,
-    documentId: string,
-    metadata: Record<string, unknown>
+    _userId: string,
+    _documentId: string,
+    _metadata: Record<string, unknown>
   ): Promise<void> {
     throw new Error('Not implemented');
   }
 
   async getDocument(
-    userId: string,
-    documentId: string
+    _userId: string,
+    _documentId: string
   ): Promise<{
     metadata: Record<string, unknown>;
     ipfsHash: string;
