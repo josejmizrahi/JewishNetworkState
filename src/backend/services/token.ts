@@ -51,18 +51,18 @@ export interface TokenService {
 // Placeholder implementation
 export class DefaultTokenService implements TokenService {
   async issueShekelCoins(
-    toAddress: string,
-    amount: bigint,
-    metadata?: Record<string, unknown>
+    _toAddress: string,
+    _amount: bigint,
+    _metadata?: Record<string, unknown>
   ): Promise<ShekelCoin> {
     throw new Error('Not implemented');
   }
 
   async awardMitzvahPoints(
-    toAddress: string,
-    points: number,
-    category: MitzvahPoints['category'],
-    achievement: {
+    _toAddress: string,
+    _points: number,
+    _category: MitzvahPoints['category'],
+    _achievement: {
       name: string;
       description: string;
     }
@@ -71,16 +71,16 @@ export class DefaultTokenService implements TokenService {
   }
 
   async transferShekelCoins(
-    fromAddress: string,
-    toAddress: string,
-    amount: bigint
+    _fromAddress: string,
+    _toAddress: string,
+    _amount: bigint
   ): Promise<TokenTransaction> {
     throw new Error('Not implemented');
   }
 
   async getBalance(
-    address: string,
-    tokenType: 'SHK' | 'MVP'
+    _address: string,
+    _tokenType: 'SHK' | 'MVP'
   ): Promise<{
     available: string;
     frozen?: string;
