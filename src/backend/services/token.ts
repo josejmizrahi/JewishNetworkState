@@ -2,7 +2,10 @@
  * Token service for managing ShekelCoin and MitzvahPoints
  */
 
+import { randomUUID } from 'crypto';
 import { TokenTransaction, ShekelCoin, MitzvahPoints } from '../models/Token';
+import { XRPLService } from './xrpl';
+import { DatabaseService } from './database';
 
 export interface TokenService {
   /**
@@ -48,43 +51,131 @@ export interface TokenService {
   }>;
 }
 
-// Placeholder implementation
 export class DefaultTokenService implements TokenService {
+  constructor(
+    private readonly xrplService: XRPLService,
+    private readonly databaseService: DatabaseService
+  ) {}
   async issueShekelCoins(
-    _toAddress: string,
-    _amount: bigint,
-    _metadata?: Record<string, unknown>
+    toAddress: string,
+    amount: bigint,
+    metadata?: Record<string, unknown>
   ): Promise<ShekelCoin> {
-    throw new Error('Not implemented');
+    // Set up trust line if not exists
+    await this.xrplService.setupTrustLine(
+      toAddress,
+      'SHK',
+      amount.toString()
+    );
+
+    // Issue tokens
+    const payment = await this.xrplService.issueTokens(
+      toAddress,
+      'SHK',
+      amount.toString(),
+      metadata ? JSON.stringify(metadata) : undefined
+    );
+
+    // Record issuance
+    const shekelCoin: ShekelCoin = {
+      id: randomUUID(),
+      address: toAddress,
+      amount: amount.toString(),
+      timestamp: new Date(),
+      status: 'issued',
+      metadata
+    };
+
+    await this.databaseService.recordTokenIssuance(shekelCoin);
+
+    return shekelCoin;
   }
 
   async awardMitzvahPoints(
-    _toAddress: string,
-    _points: number,
-    _category: MitzvahPoints['category'],
-    _achievement: {
+    toAddress: string,
+    points: number,
+    category: MitzvahPoints['category'],
+    achievement: {
       name: string;
       description: string;
     }
   ): Promise<MitzvahPoints> {
-    throw new Error('Not implemented');
+    // Set up trust line for MVP tokens
+    await this.xrplService.setupTrustLine(
+      toAddress,
+      'MVP',
+      points.toString()
+    );
+
+    // Issue soulbound tokens
+    const payment = await this.xrplService.issueTokens(
+      toAddress,
+      'MVP',
+      points.toString(),
+      JSON.stringify({
+        category,
+        achievement,
+        soulbound: true
+      })
+    );
+
+    // Record achievement
+    const mitzvahPoints: MitzvahPoints = {
+      id: randomUUID(),
+      address: toAddress,
+      points,
+      category,
+      achievement,
+      timestamp: new Date(),
+      status: 'awarded'
+    };
+
+    await this.databaseService.recordAchievement(mitzvahPoints);
+
+    return mitzvahPoints;
   }
 
   async transferShekelCoins(
-    _fromAddress: string,
-    _toAddress: string,
-    _amount: bigint
+    fromAddress: string,
+    toAddress: string,
+    amount: bigint
   ): Promise<TokenTransaction> {
-    throw new Error('Not implemented');
+    // Verify sufficient balance
+    const balance = await this.xrplService.getBalance(fromAddress, 'SHK');
+    if (BigInt(balance.balance) < amount) {
+      throw new Error('Insufficient balance');
+    }
+
+    // Transfer tokens
+    const transaction = await this.xrplService.transferTokens(
+      fromAddress,
+      toAddress,
+      'SHK',
+      amount.toString()
+    );
+
+    // Record transfer
+    await this.databaseService.recordTokenTransfer(transaction);
+
+    return transaction;
   }
 
   async getBalance(
-    _address: string,
-    _tokenType: 'SHK' | 'MVP'
+    address: string,
+    tokenType: 'SHK' | 'MVP'
   ): Promise<{
     available: string;
     frozen?: string;
   }> {
-    throw new Error('Not implemented');
+    const balance = await this.xrplService.getBalance(
+      address,
+      tokenType
+    );
+
+    return {
+      available: balance.frozen ? '0' : balance.balance,
+      frozen: balance.frozen ? balance.balance : undefined
+    };
+  }
   }
 }
