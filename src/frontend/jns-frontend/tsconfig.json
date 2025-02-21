@@ -10,6 +10,7 @@
       "@/*": ["src/*"]
     },
     "moduleResolution": "node",
+    "types": ["react", "react-dom", "react-router-dom"],
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
