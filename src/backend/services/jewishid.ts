@@ -105,7 +105,7 @@ export class DefaultJewishIDService implements JewishIDService {
 
     // Set up MFA if enabled
     if (mfaEnabled) {
-      await this.authService.setupTOTP(email);
+      const { secret: _secret, qrCode: _qrCode } = await this.authService.setupTOTP(email);
       await this.authService.generateBackupCodes(email);
     }
 
@@ -267,7 +267,7 @@ export class DefaultJewishIDService implements JewishIDService {
     // Update MFA settings
     if (enable && !decrypted.mfaEnabled) {
       const { email } = decrypted;
-      await this.authService.setupTOTP(email as string);
+      const { secret: _secret, qrCode: _qrCode } = await this.authService.setupTOTP(email as string);
       await this.authService.generateBackupCodes(email as string);
     }
 
@@ -336,7 +336,7 @@ export class DefaultJewishIDService implements JewishIDService {
       throw new Error('Profile not found');
     }
 
-    await this.verificationService.calculateTrustLevel(profile.endorsements);
+    const _trustLevel = await this.verificationService.calculateTrustLevel(profile.endorsements);
     const currentLevel = profile.verificationLevel;
 
     // Define requirements for each level
