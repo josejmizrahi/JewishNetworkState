@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { StepCard } from "../../components/verification/step-card"
 import { DocumentUpload } from "../../components/verification/document-upload"
 import { Pagination } from "../../components/ui/pagination"
+import { ScrollArea } from "../../components/ui/scroll-area"
 import { VERIFICATION_STEPS } from "../../types/verification"
 
 const STEPS_PER_PAGE = 3
@@ -16,7 +17,7 @@ export default function Verification() {
     currentPage * STEPS_PER_PAGE
   );
 
-  const handleUpload = async (file: File) => {
+  const handleUpload = async (_file: File) => {
     // TODO: Implement actual file upload logic
     await new Promise(resolve => setTimeout(resolve, 2000));
   };
@@ -37,29 +38,31 @@ export default function Verification() {
         </div>
       </div>
 
-      <div className="grid gap-6">
-        {currentSteps.map((step, index) => (
-          <div key={step.id} className="space-y-6">
-            <StepCard
-              step={step}
-              isActive={currentStep === index + (currentPage - 1) * STEPS_PER_PAGE}
-              onActivate={() => setCurrentStep(index + (currentPage - 1) * STEPS_PER_PAGE)}
-            />
-            {currentStep === index + (currentPage - 1) * STEPS_PER_PAGE && step.id === 'document-upload' && (
-              <div className="grid gap-6 p-6 border rounded-lg bg-muted/50">
-                <DocumentUpload
-                  type="identity"
-                  onUpload={handleUpload}
-                />
-                <DocumentUpload
-                  type="heritage"
-                  onUpload={handleUpload}
-                />
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
+      <ScrollArea className="h-[calc(100vh-16rem)] rounded-lg border">
+        <div className="grid gap-6 p-6">
+          {currentSteps.map((step, index) => (
+            <div key={step.id} className="space-y-6 transition-all duration-300 ease-in-out">
+              <StepCard
+                step={step}
+                isActive={currentStep === index + (currentPage - 1) * STEPS_PER_PAGE}
+                onActivate={() => setCurrentStep(index + (currentPage - 1) * STEPS_PER_PAGE)}
+              />
+              {currentStep === index + (currentPage - 1) * STEPS_PER_PAGE && step.id === 'document-upload' && (
+                <div className="grid gap-6 p-6 border rounded-lg bg-muted/50">
+                  <DocumentUpload
+                    type="identity"
+                    onUpload={handleUpload}
+                  />
+                  <DocumentUpload
+                    type="heritage"
+                    onUpload={handleUpload}
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
 
       <Pagination
         currentPage={currentPage}
