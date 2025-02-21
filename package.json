@@ -2,7 +2,7 @@
   "name": "jewishnetworkstate",
   "version": "1.0.0",
   "description": "Jewish Network State - A decentralized platform for Jewish identity and community",
-  "type": "module",
+
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
