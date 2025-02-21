@@ -3,7 +3,7 @@
  */
 
 import { Client, Wallet } from 'xrpl';
-import { TrustSet, Payment } from 'xrpl/dist/npm/models/transactions';
+import { _TrustSet, _Payment } from 'xrpl/dist/npm/models/transactions';
 import { DatabaseService } from './database';
 import { KeyStoreService } from './keystore';
 
