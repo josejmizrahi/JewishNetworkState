@@ -6,7 +6,7 @@ import { Button } from './components/ui'
 import { UserCheck, Shield, Users, ChevronRight } from 'lucide-react'
 import Verification from './pages/verification'
 
-function App() {
+export function App() {
   return (
     <Router>
       <ThemeProvider defaultTheme="system" storageKey="jns-theme">
@@ -102,5 +102,3 @@ function Home() {
     </div>
   )
 }
-
-export default App
