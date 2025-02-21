@@ -3,7 +3,7 @@
  */
 
 import { JewishID, VerificationLevel, Endorsement, EncryptedDocument } from '../models/JewishID';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { AuthService } from './auth';
 import { DatabaseService } from './database';
 import { EncryptionService } from './encryption';
@@ -127,7 +127,7 @@ export class DefaultJewishIDService implements JewishIDService {
           this.encryptionService
         );
         documents.push({
-          id: randomUUID(),
+          id: crypto.randomUUID(),
           ipfsHash,
           encryptedKey: encryptedKeys[publicKey],
           documentType: doc.type,
