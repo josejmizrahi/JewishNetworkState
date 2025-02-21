@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 import { Link } from "react-router-dom"
 import { ThemeToggle } from "./theme-toggle"
 import { Button } from "./ui/index"
-import { UserCheck, FileCheck, LogOut } from "lucide-react"
+import { UserCheck, FileCheck, LogOut, User } from "lucide-react"
 
 interface LayoutProps {
   children: ReactNode
@@ -17,6 +17,12 @@ export function Layout({ children }: LayoutProps) {
             <span className="font-bold">JewishID</span>
           </Link>
           <nav className="flex flex-1 items-center space-x-2">
+            <Link to="/profile">
+              <Button variant="ghost" size="sm">
+                <User className="mr-2 h-4 w-4" />
+                Profile
+              </Button>
+            </Link>
             <Link to="/verification">
               <Button variant="ghost" size="sm">
                 <UserCheck className="mr-2 h-4 w-4" />
