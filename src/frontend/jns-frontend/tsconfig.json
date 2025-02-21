@@ -14,6 +14,7 @@
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+    "types": ["vite/client", "node", "react", "react-dom", "react-router-dom"],
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
