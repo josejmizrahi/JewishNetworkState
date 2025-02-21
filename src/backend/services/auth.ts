@@ -35,8 +35,8 @@ export interface AuthService {
    * Generate TOTP secret and QR code
    */
   setupTOTP(userId: string): Promise<{
-    secret: string;
-    qrCode: string;
+    _secret: string;
+    _qrCode: string;
   }>;
 
   /**
@@ -71,8 +71,8 @@ export interface AuthService {
 // Placeholder implementation
 export class DefaultAuthService implements AuthService {
   async setupTOTP(_userId: string): Promise<{
-    secret: string;
-    qrCode: string;
+    _secret: string;
+    _qrCode: string;
   }> {
     throw new Error('Not implemented');
   }

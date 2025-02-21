@@ -16,7 +16,7 @@ export interface EncryptionService {
   /**
    * Generate a new key pair
    */
-  generateKeyPair(): Promise<{publicKey: string; privateKey: string}>;
+  generateKeyPair(): Promise<{publicKey: string; _privateKey: string}>;
 
   /**
    * Encrypt a document for multiple recipients
@@ -56,7 +56,7 @@ export class DefaultEncryptionService implements EncryptionService {
     throw new Error('Not implemented');
   }
 
-  async generateKeyPair(): Promise<{publicKey: string; privateKey: string}> {
+  async generateKeyPair(): Promise<{publicKey: string; _privateKey: string}> {
     throw new Error('Not implemented');
   }
 
