@@ -11,17 +11,13 @@
     },
 
     /* Bundler mode */
-    "moduleResolution": "node",
-    "jsx": "react-jsx",
-    "jsxImportSource": "react",
-    "allowJs": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["vite/client", "node", "react", "react-dom"],
+    "jsx": "react-jsx",
+    "types": ["vite/client", "node"],
 
     /* Linting */
     "strict": true,
