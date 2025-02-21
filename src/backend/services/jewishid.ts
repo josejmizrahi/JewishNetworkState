@@ -3,7 +3,7 @@
  */
 
 import { JewishID, VerificationLevel, Endorsement, EncryptedDocument } from '../models/JewishID';
-import { randomUUID } from 'node:crypto';
+import { randomUUID } from 'crypto';
 import { AuthService } from './auth';
 import { DatabaseService } from './database';
 import { EncryptionService } from './encryption';
@@ -100,11 +100,11 @@ export class DefaultJewishIDService implements JewishIDService {
     }>
   ): Promise<JewishID> {
     // Generate key pair for personal info encryption
-    const { publicKey, _privateKey } = await this.encryptionService.generateKeyPair();
+    const { publicKey } = await this.encryptionService.generateKeyPair();
 
     // Set up MFA if enabled
     if (mfaEnabled) {
-      const { _secret, _qrCode } = await this.authService.setupTOTP(email);
+      await this.authService.setupTOTP(email);
       await this.authService.generateBackupCodes(email);
     }
 
@@ -266,7 +266,7 @@ export class DefaultJewishIDService implements JewishIDService {
     // Update MFA settings
     if (enable && !decrypted.mfaEnabled) {
       const { email } = decrypted;
-      const { _secret, _qrCode } = await this.authService.setupTOTP(email as string);
+      await this.authService.setupTOTP(email as string);
       await this.authService.generateBackupCodes(email as string);
     }
 
