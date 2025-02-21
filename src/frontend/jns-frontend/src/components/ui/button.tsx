@@ -2,6 +2,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { type VariantProps } from "class-variance-authority"
 import { cn } from "../../lib/utils"
+// Import button variants from a separate file to avoid fast refresh warning
 import { buttonVariants } from "./button/variants"
 
 export interface ButtonProps
@@ -24,4 +25,4 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = "Button"
 
-export { Button, buttonVariants }
+export { Button }
