@@ -66,26 +66,8 @@ export interface XRPLService {
     currency: string;
     value: string;
     issuer: string;
-  }>>;
-  
-  /**
-   * Get issuer address
-   */
-  initializeIssuer(): Promise<{
-    issuerAddress: string;
-    shekelCoinCurrency: string;
-    mitzvahPointsCurrency: string;
-  }>;
-
-  /**
-   * Get token balances for an address
-   */
-  getBalances(address: string): Promise<{
-    currency: string;
-    value: string;
-    issuer: string;
     frozen?: boolean;
-  }[]>;
+  }>>;
 
   /**
    * Set up trust line for a user
