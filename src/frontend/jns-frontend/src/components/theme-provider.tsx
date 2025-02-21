@@ -7,9 +7,9 @@ interface ThemeProviderProps {
   storageKey?: string;
 }
 
-export function ThemeProvider({ children, defaultTheme = "system", storageKey = "jns-theme" }: ThemeProviderProps) {
+export function ThemeProvider({ children, defaultTheme = "system", storageKey = "jns-theme" }: ThemeProviderProps): React.ReactElement {
   return (
-    <NextThemesProvider defaultTheme={defaultTheme} storageKey={storageKey}>
+    <NextThemesProvider defaultTheme={defaultTheme} storageKey={storageKey} attribute="class">
       {children}
     </NextThemesProvider>
   )
