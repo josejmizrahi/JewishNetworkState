@@ -15,11 +15,67 @@ export interface XRPLConfig {
 }
 
 export interface XRPLService {
-  issuerWallet: Wallet;
   /**
    * Initialize XRPL client and issuer wallet
    */
   initialize(config: XRPLConfig): Promise<void>;
+
+  /**
+   * Initialize issuer account and currencies
+   */
+  initializeIssuer(): Promise<{
+    issuerAddress: string;
+    shekelCoinCurrency: string;
+    mitzvahPointsCurrency: string;
+  }>;
+
+  /**
+   * Set up trust line for user
+   */
+  setupTrustLine(
+    userAddress: string,
+    currency: 'SHK' | 'MVP',
+    limit: string
+  ): Promise<string>;
+
+  /**
+   * Issue tokens to user
+   */
+  issueTokens(
+    toAddress: string,
+    currency: 'SHK' | 'MVP',
+    amount: string
+  ): Promise<string>;
+
+  /**
+   * Transfer tokens between users
+   */
+  transferTokens(
+    fromAddress: string,
+    toAddress: string,
+    currency: 'SHK' | 'MVP',
+    amount: string
+  ): Promise<string>;
+
+  /**
+   * Get account balances
+   */
+  getBalances(
+    address: string
+  ): Promise<Array<{
+    currency: string;
+    value: string;
+    issuer: string;
+  }>>;
+  
+  /**
+   * Get issuer address
+   */
+  initializeIssuer(): Promise<{
+    issuerAddress: string;
+    shekelCoinCurrency: string;
+    mitzvahPointsCurrency: string;
+  }>;
 
   /**
    * Get token balances for an address
@@ -109,7 +165,7 @@ export interface XRPLService {
 
 export class DefaultXRPLService implements XRPLService {
   private client: Client;
-  private issuerWallet: Wallet;
+  public readonly issuerWallet: Wallet;
 
   constructor(
     private readonly config: XRPLConfig,

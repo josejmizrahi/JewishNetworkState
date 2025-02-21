@@ -46,4 +46,3 @@ export interface TokenTransaction {
     xrplTxHash?: string;
   };
 }
-}
