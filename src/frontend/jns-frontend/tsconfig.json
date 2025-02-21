@@ -9,8 +9,11 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "types": ["react", "react-dom", "react-router-dom"],
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
