@@ -9,6 +9,7 @@ import { DatabaseService } from './database';
 import { EncryptionService } from './encryption';
 import { IPFSService } from './ipfs';
 import { VerificationService } from './verification';
+import * as crypto from 'node:crypto';
 
 export interface JewishIDService {
   /**

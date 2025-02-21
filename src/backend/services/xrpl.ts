@@ -4,7 +4,7 @@
 
 import { Client, Wallet } from 'xrpl';
 // These types are used in JSDoc comments
-import type { _TrustSet, _Payment } from 'xrpl/dist/npm/models/transactions';
+import type { TrustSet as _TrustSet, Payment as _Payment } from 'xrpl/dist/npm/models/transactions';
 import { DatabaseService } from './database';
 import { KeyStoreService } from './keystore';
 
