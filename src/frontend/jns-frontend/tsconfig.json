@@ -23,8 +23,6 @@
     "allowImportingTsExtensions": true,
     "types": ["vite/client", "node", "react", "react-dom", "react-router-dom"],
     "moduleDetection": "force",
-    "jsxFactory": "React.createElement",
-    "jsxFragmentFactory": "React.Fragment",
 
     /* Linting */
     "strict": true,
