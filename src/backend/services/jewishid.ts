@@ -2,7 +2,7 @@
  * JewishID service for managing identity verification and user profiles
  */
 
-import { JewishID, VerificationLevel, Endorsement } from '../models/JewishID';
+import { JewishID, VerificationLevel, Endorsement, EncryptedDocument } from '../models/JewishID';
 import { AuthService } from './auth';
 import { DatabaseService } from './database';
 import { EncryptionService } from './encryption';
@@ -221,31 +221,106 @@ export class DefaultJewishIDService implements JewishIDService {
   }
 
   async getProfile(
-    _id: string,
-    _includePersonalInfo?: boolean
+    id: string,
+    includePersonalInfo?: boolean
   ): Promise<{
     profile: JewishID;
     personalInfo?: Record<string, unknown>;
   }> {
-    throw new Error('Not implemented');
+    const profile = await this.databaseService.getProfile(id);
+    if (!profile) {
+      throw new Error('Profile not found');
+    }
+
+    let decryptedInfo: Record<string, unknown> | undefined;
+    if (includePersonalInfo) {
+      const decrypted = await this.encryptionService.decrypt(
+        profile.personalInfo.encryptedData,
+        profile.personalInfo.publicKey
+      );
+      decryptedInfo = decrypted as Record<string, unknown>;
+    }
+
+    return {
+      profile,
+      personalInfo: decryptedInfo
+    };
   }
 
   async updateMFASettings(
-    _id: string,
-    _enable: boolean
+    id: string,
+    enable: boolean
   ): Promise<void> {
-    throw new Error('Not implemented');
+    const profile = await this.databaseService.getProfile(id);
+    if (!profile) {
+      throw new Error('Profile not found');
+    }
+
+    // Get decrypted personal info
+    const decrypted = await this.encryptionService.decrypt(
+      profile.personalInfo.encryptedData,
+      profile.personalInfo.publicKey
+    ) as Record<string, unknown>;
+
+    // Update MFA settings
+    if (enable && !decrypted.mfaEnabled) {
+      const { email } = decrypted;
+      const { secret, qrCode } = await this.authService.setupTOTP(email as string);
+      await this.authService.generateBackupCodes(email as string);
+    }
+
+    // Update and re-encrypt personal info
+    const updatedInfo = {
+      ...decrypted,
+      mfaEnabled: enable
+    };
+    const encryptedData = await this.encryptionService.encrypt(
+      updatedInfo,
+      profile.personalInfo.publicKey
+    );
+
+    // Update profile
+    await this.databaseService.updateProfile(id, {
+      ...profile,
+      personalInfo: {
+        ...profile.personalInfo,
+        encryptedData
+      },
+      updatedAt: new Date()
+    });
   }
 
   async addEndorsement(
-    _id: string,
-    _endorsement: Endorsement
+    id: string,
+    endorsement: Endorsement
   ): Promise<void> {
-    throw new Error('Not implemented');
+    const profile = await this.databaseService.getProfile(id);
+    if (!profile) {
+      throw new Error('Profile not found');
+    }
+
+    // Verify endorsement signature
+    const isValid = await this.verificationService.verifyEndorsement(endorsement);
+    if (!isValid) {
+      throw new Error('Invalid endorsement signature');
+    }
+
+    // Add endorsement and update trust level
+    const updatedProfile: JewishID = {
+      ...profile,
+      endorsements: [...profile.endorsements, endorsement],
+      updatedAt: new Date(),
+      verificationMeta: {
+        ...profile.verificationMeta,
+        verifierIds: [...profile.verificationMeta.verifierIds, endorsement.issuerId]
+      }
+    };
+
+    await this.databaseService.updateProfile(id, updatedProfile);
   }
 
   async getVerificationStatus(
-    _id: string
+    id: string
   ): Promise<{
     currentLevel: typeof VerificationLevel[keyof typeof VerificationLevel];
     missingRequirements: Array<{
@@ -254,6 +329,39 @@ export class DefaultJewishIDService implements JewishIDService {
     }>;
     nextLevel?: typeof VerificationLevel[keyof typeof VerificationLevel];
   }> {
-    throw new Error('Not implemented');
+    const profile = await this.databaseService.getProfile(id);
+    if (!profile) {
+      throw new Error('Profile not found');
+    }
+
+    const trustLevel = await this.verificationService.calculateTrustLevel(profile.endorsements);
+    const currentLevel = profile.verificationLevel;
+
+    // Define requirements for each level
+    const requirements = {
+      [VerificationLevel.BASIC]: [
+        { type: 'identity', description: 'Government-issued ID' },
+        { type: 'contact', description: 'Verified email and phone' }
+      ],
+      [VerificationLevel.ADVANCED]: [
+        { type: 'heritage', description: 'Proof of Jewish heritage or conversion' },
+        { type: 'community', description: 'Active community membership' },
+        { type: 'endorsement', description: 'Minimum two endorsements' }
+      ]
+    };
+
+    // Determine missing requirements
+    const missingRequirements = requirements[currentLevel].filter(req => {
+      if (req.type === 'endorsement') {
+        return profile.endorsements.length < 2;
+      }
+      return !profile.documents.some(doc => doc.documentType === req.type);
+    });
+
+    return {
+      currentLevel,
+      missingRequirements,
+      nextLevel: currentLevel === VerificationLevel.BASIC ? VerificationLevel.ADVANCED : undefined
+    };
   }
 }
