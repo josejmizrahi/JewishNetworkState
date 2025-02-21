@@ -6,36 +6,40 @@ import { JewishID } from '../models/JewishID';
 import { TokenTransaction, ShekelCoin, MitzvahPoints } from '../models/Token';
 
 export interface DatabaseService {
+  /**
+   * Token operations
+   */
   recordTokenIssuance(token: ShekelCoin): Promise<void>;
   recordAchievement(achievement: MitzvahPoints): Promise<void>;
   recordTokenTransfer(transaction: TokenTransaction): Promise<void>;
+  
   /**
    * User profile operations
    */
-  createProfile(_profile: JewishID): Promise<JewishID>;
-  updateProfile(_id: string, _updates: Partial<JewishID>): Promise<JewishID>;
-  getProfile(_id: string): Promise<JewishID | null>;
+  createProfile(profile: JewishID): Promise<JewishID>;
+  updateProfile(id: string, updates: Partial<JewishID>): Promise<JewishID>;
+  getProfile(id: string): Promise<JewishID | null>;
   
   /**
    * Transaction operations
    */
-  recordTransaction(_tx: TokenTransaction): Promise<void>;
+  recordTransaction(tx: TokenTransaction): Promise<void>;
   getTransactionHistory(
-    _address: string,
-    _tokenType?: 'SHK' | 'MVP'
+    address: string,
+    tokenType?: 'SHK' | 'MVP'
   ): Promise<TokenTransaction[]>;
 
   /**
    * Document operations
    */
   storeDocument(
-    _userId: string,
-    _documentId: string,
-    _metadata: Record<string, unknown>
+    userId: string,
+    documentId: string,
+    metadata: Record<string, unknown>
   ): Promise<void>;
   getDocument(
-    _userId: string,
-    _documentId: string
+    userId: string,
+    documentId: string
   ): Promise<{
     metadata: Record<string, unknown>;
     ipfsHash: string;
