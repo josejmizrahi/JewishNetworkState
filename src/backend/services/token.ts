@@ -61,14 +61,13 @@ export class DefaultTokenService implements TokenService {
     amount: bigint,
     metadata?: Record<string, unknown>
   ): Promise<ShekelCoin> {
-    // Set up trust line if not exists
+    // Set up trust line and issue tokens
     await this.xrplService.setupTrustLine(
       toAddress,
       'SHK',
-      amount.toString()
+      amount.toString(10)
     );
 
-    // Issue tokens on XRPL
     await this.xrplService.issueTokens(
       toAddress,
       'SHK',
@@ -102,14 +101,13 @@ export class DefaultTokenService implements TokenService {
       description: string;
     }
   ): Promise<MitzvahPoints> {
-    // Set up trust line for MVP tokens
+    // Set up trust line and issue soulbound tokens
     await this.xrplService.setupTrustLine(
       toAddress,
       'MVP',
       points.toString()
     );
 
-    // Issue soulbound tokens on XRPL
     await this.xrplService.issueTokens(
       toAddress,
       'MVP',
