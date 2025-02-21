@@ -2,7 +2,7 @@
  * JewishID service for managing identity verification and user profiles
  */
 
-import { randomUUID } from 'crypto';
+import * as crypto from 'node:crypto';
 import { JewishID, VerificationLevel, Endorsement, EncryptedDocument } from '../models/JewishID';
 import { AuthService } from './auth';
 import { DatabaseService } from './database';
@@ -100,13 +100,11 @@ export class DefaultJewishIDService implements JewishIDService {
     }>
   ): Promise<JewishID> {
     // Generate key pair for personal info encryption
-    const { publicKey } = await this.encryptionService.generateKeyPair();
+    const { publicKey, _privateKey } = await this.encryptionService.generateKeyPair();
 
     // Set up MFA if enabled
     if (mfaEnabled) {
-      const result = await this.authService.setupTOTP(email);
-      const _secret = result.secret;
-      const _qrCode = result.qrCode;
+      const { _secret, _qrCode } = await this.authService.setupTOTP(email);
       await this.authService.generateBackupCodes(email);
     }
 
@@ -129,7 +127,7 @@ export class DefaultJewishIDService implements JewishIDService {
           this.encryptionService
         );
         documents.push({
-          id: randomUUID(),
+          id: crypto.randomUUID(),
           ipfsHash,
           encryptedKey: encryptedKeys[publicKey],
           documentType: doc.type,
@@ -144,7 +142,7 @@ export class DefaultJewishIDService implements JewishIDService {
 
     // Create JewishID profile
     const profile: JewishID = {
-      id: randomUUID(),
+      id: crypto.randomUUID(),
       createdAt: new Date(),
       updatedAt: new Date(),
       verificationLevel: VerificationLevel.BASIC,
@@ -192,7 +190,7 @@ export class DefaultJewishIDService implements JewishIDService {
         this.encryptionService
       );
       newDocuments.push({
-        id: randomUUID(),
+        id: crypto.randomUUID(),
         ipfsHash,
         encryptedKey: encryptedKeys[profile.personalInfo.publicKey],
         documentType: doc.type,
@@ -268,9 +266,7 @@ export class DefaultJewishIDService implements JewishIDService {
     // Update MFA settings
     if (enable && !decrypted.mfaEnabled) {
       const { email } = decrypted;
-      const result = await this.authService.setupTOTP(email as string);
-      const _secret = result.secret;
-      const _qrCode = result.qrCode;
+      const { _secret, _qrCode } = await this.authService.setupTOTP(email as string);
       await this.authService.generateBackupCodes(email as string);
     }
 
@@ -339,7 +335,7 @@ export class DefaultJewishIDService implements JewishIDService {
       throw new Error('Profile not found');
     }
 
-    const _trustLevel = await this.verificationService.calculateTrustLevel(profile.endorsements);
+    await this.verificationService.calculateTrustLevel(profile.endorsements);
     const currentLevel = profile.verificationLevel;
 
     // Define requirements for each level
