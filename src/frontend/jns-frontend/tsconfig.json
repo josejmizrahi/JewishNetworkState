@@ -3,7 +3,7 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
+    "module": "esnext",
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
@@ -22,6 +22,7 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "types": ["vite/client", "node", "react", "react-dom"],
+    "moduleDetection": "force",
 
     /* Linting */
     "strict": true,
