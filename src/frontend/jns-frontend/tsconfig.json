@@ -14,6 +14,8 @@
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+    "jsxFactory": "React.createElement",
+    "jsxFragmentFactory": "React.Fragment",
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
