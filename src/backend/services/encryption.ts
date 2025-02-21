@@ -6,8 +6,8 @@ export interface EncryptionService {
   encrypt(data: unknown, publicKey: string): Promise<string>;
   decrypt(encryptedData: string, privateKey: string): Promise<unknown>;
   generateKeyPair(): Promise<{publicKey: string; privateKey: string}>;
-  encryptDocument(document: Buffer, recipientPublicKeys: string[]): Promise<{
-    encryptedData: Buffer;
+  encryptDocument(document: Uint8Array, recipientPublicKeys: string[]): Promise<{
+    encryptedData: Uint8Array;
     encryptedKeys: Record<string, string>;
   }>;
 }
@@ -27,10 +27,10 @@ export class DefaultEncryptionService implements EncryptionService {
   }
 
   async encryptDocument(
-    document: Buffer,
+    document: Uint8Array,
     recipientPublicKeys: string[]
   ): Promise<{
-    encryptedData: Buffer;
+    encryptedData: Uint8Array;
     encryptedKeys: Record<string, string>;
   }> {
     throw new Error('Not implemented');

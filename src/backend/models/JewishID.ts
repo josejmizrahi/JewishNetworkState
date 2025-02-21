@@ -3,20 +3,20 @@
  * from the Jewish Network State specification
  */
 
-export enum VerificationLevel {
-  BASIC = 'basic',
-  ADVANCED = 'advanced'
-}
+export const VerificationLevel = {
+  BASIC: 'basic',
+  ADVANCED: 'advanced'
+} as const;
 
-export enum EndorsementType {
-  RABBI = 'rabbi',
-  SYNAGOGUE = 'synagogue',
-  FEDERATION = 'federation'
-}
+export const EndorsementType = {
+  RABBI: 'rabbi',
+  SYNAGOGUE: 'synagogue',
+  FEDERATION: 'federation'
+} as const;
 
 export interface Endorsement {
   issuerId: string;
-  type: EndorsementType;
+  type: typeof EndorsementType[keyof typeof EndorsementType];
   level: number;
   timestamp: Date;
   signature: string;
@@ -38,7 +38,7 @@ export interface JewishID {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  verificationLevel: VerificationLevel;
+  verificationLevel: typeof VerificationLevel[keyof typeof VerificationLevel];
   endorsements: Endorsement[];
   documents: EncryptedDocument[];
   status: 'active' | 'pending' | 'suspended';

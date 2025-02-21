@@ -9,7 +9,7 @@ export interface IPFSService {
    * Store an encrypted document on IPFS
    */
   storeDocument(
-    document: Buffer,
+    document: Uint8Array,
     recipientPublicKeys: string[],
     encryptionService: EncryptionService
   ): Promise<{
@@ -24,13 +24,13 @@ export interface IPFSService {
     ipfsHash: string,
     privateKey: string,
     encryptionService: EncryptionService
-  ): Promise<Buffer>;
+  ): Promise<Uint8Array>;
 }
 
 // Placeholder implementation
 export class DefaultIPFSService implements IPFSService {
   async storeDocument(
-    document: Buffer,
+    document: Uint8Array,
     recipientPublicKeys: string[],
     encryptionService: EncryptionService
   ): Promise<{
@@ -44,7 +44,7 @@ export class DefaultIPFSService implements IPFSService {
     ipfsHash: string,
     privateKey: string,
     encryptionService: EncryptionService
-  ): Promise<Buffer> {
+  ): Promise<Uint8Array> {
     throw new Error('Not implemented');
   }
 }
